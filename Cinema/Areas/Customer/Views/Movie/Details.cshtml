@@ -1,0 +1,224 @@
+﻿@using Cinema.ViewModels
+@model MovieDetailsViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.movie.Name - Movie Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .movie-banner {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            filter: brightness(0.85);
+            transition: transform 0.5s ease;
+        }
+
+        .banner-container:hover .movie-banner {
+            transform: scale(1.03);
+        }
+
+        .banner-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%);
+            padding: 30px 20px 20px;
+        }
+
+        .movie-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 0;
+        }
+
+        .badge {
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .actor-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+            .actor-img:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: dodgerblue;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+            .back-btn:hover {
+                background-color: royalblue;
+            }
+
+        .category-link {
+            color: #e50914; /* Netflix Red */
+            text-decoration: none; /* Removes underline */
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+            .category-link:hover {
+                color: #ff4c4c; /* Lighter red on hover */
+                text-decoration: underline;
+            }
+
+        .details-container {
+            background-color: #222;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .trailer-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .price-tag {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e50914;
+        }
+
+        .actors-section {
+            background-color: #222;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            border-left: 4px solid #e50914;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Enhanced Movie Banner with Overlay -->
+        <div class="banner-container">
+            <img src="~/assets/movies/@Model.movie.ImageUrl" alt="@Model.movie.Name" class="movie-banner">
+            <div class="banner-overlay">
+                <h1 class="movie-title">@Model.movie.Name</h1>
+                @if (Model.movie.MovieStatus.ToString() == "Available")
+                {
+                    <span class="badge bg-success">Available</span>
+                }
+                else if (Model.movie.MovieStatus.ToString() == "ComingSoon")
+                {
+                    <span class="badge bg-warning text-dark">Coming Soon</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Expired</span>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7">
+                <!-- Movie Details -->
+                <div class="details-container">
+                    <p>
+                        <strong>Category:</strong>
+                        <a class="category-link" asp-area="Customer" asp-controller="Category" asp-action="Details" asp-route-id="@Model.movie.CategoryId">
+                            @Model.movie.Category.Name
+                        </a>
+                    </p>
+                    <p><strong>Cinema:</strong> @Model.movie.Cinema.Name</p>
+                    <p><strong>Start Date:</strong> @Model.movie.StartDate.ToShortDateString()</p>
+                    <p><strong>End Date:</strong> @Model.movie.EndDate.ToShortDateString()</p>
+                    <p><strong>Price:</strong> <span class="price-tag">EGP @Model.movie.Price</span></p>
+                    <p><strong>Description:</strong> @Model.movie.Description</p>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <!-- Trailer Section -->
+                <div class="trailer-container">
+                    @{
+                        string videoId = Model.movie.TrailerUrl.Split('/').Last().Split('?')[0]; // Extract video ID
+                        string embedUrl = $"https://www.youtube.com/embed/{videoId}";
+                    }
+                    <iframe width="100%" height="315" src="@embedUrl" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actors Section -->
+        <div class="actors-section">
+            <h3 class="section-title">Actors</h3>
+            <div class="row">
+                @foreach (var actor in Model.Actors)
+                {
+                    <div class="col-md-2 col-sm-4 col-6 text-center mb-3">
+                        <a asp-area="Customer" asp-controller="Actor" asp-action="Details" asp-route-id="@actor.Id">
+                            <img src="~/assets/cast/@actor.ProfilePicture" alt="@actor.FirstName" class="actor-img">
+                        </a>
+                        <a asp-area="Customer" asp-controller="Actors" asp-action="Details" asp-route-id="@actor.Id" class="text-decoration-none text-white">
+                            <p class="mt-2">@actor.FirstName @actor.LastName</p>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Back to Movies Button -->
+        <a asp-area="Customer" asp-controller="Movie" asp-action="Index" class="back-btn">← Back to Movies</a>
+    </div>
+</body>
+</html>

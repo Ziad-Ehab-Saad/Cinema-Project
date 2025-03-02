@@ -1,0 +1,51 @@
+﻿@model List<Category>
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center text-light">Categories</h2>
+    <div class="row justify-content-center">
+        @foreach (var category in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <a class="category-card" asp-area="Customer" asp-action="Details" asp-controller="Category" asp-route-id="@category.Id">
+                    <div class="card shadow-sm p-3 text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">@category.Name</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Netflix-style background */
+    body {
+        background-color: #141414; /* Dark Netflix-like background */
+        color: #ffffff; /* White text for contrast */
+    }
+
+    .category-card {
+        text-decoration: none; /* Removes underline from links */
+        display: block;
+        transition: transform 0.2s ease;
+    }
+
+    .card {
+        background-color: #222; /* Dark gray Netflix-style cards */
+        color: #fff; /* White text */
+        border-radius: 10px;
+        transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .category-card:hover .card {
+        background-color: #e50914; /* Netflix Red hover effect */
+        transform: scale(1.05); /* Small zoom effect */
+        color: #fff; /* Keep text white */
+    }
+
+    h2 {
+        font-weight: bold;
+        color: #e50914; /* Netflix Red for the title */
+    }
+</style>

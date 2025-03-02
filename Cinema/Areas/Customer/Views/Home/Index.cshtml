@@ -1,0 +1,97 @@
+﻿@{
+    Layout = null; /* Remove layout for a clean standalone page */
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .hero-section {
+            width: 100%;
+            height: 100vh; /* Full screen height */
+            position: relative;
+            background: url('@Url.Content("~/assets/img/EG-en-20250224-TRIFECTA-perspective_928c688e-939a-402e-a8cf-a219844b9522_large.jpg")') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+            /* Darker Overlay */
+            .hero-section::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7); /* Darker overlay */
+                z-index: -1;
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+            .hero-content h1 {
+                font-size: 3rem;
+                font-weight: bold;
+            }
+
+            .hero-content p {
+                font-size: 1.5rem;
+                margin: 10px 0;
+            }
+
+        /* Navigation Button */
+        .cta-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background-color: red;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+            .cta-btn:hover {
+                background-color: darkred;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Unlimited movies, TV shows, and more</h1>
+            <p>Starts at EGP 100. Cancel anytime.</p>
+            <p>Ready to watch? Click below to get started.</p>
+
+            <a asp-area="Customer" asp-action="Index" asp-controller="Movie" class="cta-btn">Get Started ▶</a>
+            <a asp-area="Customer" asp-action="Index" asp-controller="Category" class="cta-btn">Browse All Categories ▶</a>
+        </div>
+    </div>
+
+</body>
+</html>
