@@ -1,3 +1,16 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using Cinema.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> signInManager
+@inject UserManager<ApplicationUser> userManager
+
+@{
+    var user = await userManager.GetUserAsync(User);
+    if (user != null && await userManager.IsInRoleAsync(user, "admin"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml"; // Admin layout
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml"; // Default layout
+    }
 }

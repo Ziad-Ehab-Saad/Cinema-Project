@@ -8,59 +8,102 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Cinema.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+
+<body class="d-flex flex-column min-vh-100">
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-logo {
+            height: 70px; /* Adjust height to match navbar */
+            width: auto; /* Keeps aspect ratio */
+            object-fit: contain; /* Ensures image fits well */
+        }
+
+
+
+        body {
+            padding-top: 0px !important;
+        }
+
+        header {
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
     <header>
-        @* <nav class="navbar navbar-expand-lg" style="background-color: black; padding: 10px;"> *@
-        @*     <div class="container"> *@
-        @*         <a class="navbar-brand text-danger fw-bold" href="/">Cinema</a> *@
-        @*         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"> *@
-        @*             <span class="navbar-toggler-icon"></span> *@
-        @*         </button> *@
-        @*         <div class="collapse navbar-collapse" id="navbarNav"> *@
-        @*             <ul class="navbar-nav ms-auto"> *@
-        @*                 <li class="nav-item"><a class="nav-link text-light" href="/Movies">Movies</a></li> *@
-        @*                 <li class="nav-item"><a class="nav-link text-light" href="/Categories">Categories</a></li> *@
-        @*                 <li class="nav-item"><a class="nav-link text-light" href="/Cinemas">Cinemas</a></li> *@
-        @*                 <li class="nav-item"> *@
-        @*                     <input type="text" class="form-control ms-3" placeholder="Search..." style="max-width: 200px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 20px; padding: 5px 10px;"> *@
-        @*                 </li> *@
-        @*             </ul> *@
-        @*         </div> *@
-        @*     </div> *@
-        @* </nav> *@
+        @if (User.Identity.IsAuthenticated)
+        {
+            <nav class="navbar navbar-expand-lg"
+                 style="background-color: black; padding: 10px; min-height: 80px; width: 100%; margin-top: 0;">
+
+
+
+
+
+                <div class="container">
+                    <!-- Display Logged-in User's Name -->
+                    <a class="navbar-brand d-flex align-items-center text-danger fw-bold ms-3" asp-action="Index" asp-controller="Movie" asp-area="Customer">
+                        <img src="~/assets/img/Clogo.jpg" alt="Cinema Logo" class="navbar-logo me-2" />
+
+                    </a>
+                    <span class="navbar-text text-white fw-bold">
+                        Welcome, @User.Identity.Name
+                    </span>
+                    
+
+
+                    @* <a class="navbar-brand text-danger fw-bold ms-3" asp-action="Index" asp-controller="Movie" asp-area="Customer">Cinema</a> *@
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <!-- Movies Button -->
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light me-2" asp-area="Customer" asp-controller="Movie" asp-action="Index">Movies</a>
+                            </li>
+
+                            <!-- Categories Button -->
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light me-2" asp-area="Customer" asp-controller="Category" asp-action="Index">Categories</a>
+                            </li>
+
+                            <!-- Sign Out Button -->
+                            <li class="nav-item">
+                                <form asp-area="Customer" asp-controller="RegisterData" asp-action="SignOut" method="post">
+                                    <button type="submit" class="btn btn-danger">Sign Out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        }
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="flex-grow-1 pb-3">
+
+
             @RenderBody()
         </main>
     </div>
+    <footer class="bg-dark text-white py-3 mt-auto">
+        <div class="container text-center">
+            <p class="mb-1">© @DateTime.Now.Year Cinema. All Rights Reserved.</p>
+            <p class="small">Experience the best movies and cinema right at your fingertips.</p>
+        </div>
+    </footer>
 
-    @* <footer class="bg-dark text-white py-4 mt-4"> *@
-    @*     <div class="container text-center"> *@
-    @*         <div class="row"> *@
-    @*             <div class="col-md-4"> *@
-    @*                 <h5>About</h5> *@
-    @*                 <p>Experience the best movies and cinema right at your fingertips.</p> *@
-    @*             </div> *@
-    @*             <div class="col-md-4"> *@
-    @*                 <h5>Quick Links</h5> *@
-    @*                 <ul class="list-unstyled"> *@
-    @*                     <li><a href="/Movies" class="text-light text-decoration-none">Movies</a></li> *@
-    @*                     <li><a href="/Categories" class="text-light text-decoration-none">Categories</a></li> *@
-    @*                     <li><a href="/Cinemas" class="text-light text-decoration-none">Cinemas</a></li> *@
-    @*                 </ul> *@
-    @*             </div> *@
-    @*             <div class="col-md-4"> *@
-    @*                 <h5>Follow Us</h5> *@
-    @*                 <a href="#" class="text-light me-2"><i class="bi bi-facebook"></i></a> *@
-    @*                 <a href="#" class="text-light me-2"><i class="bi bi-twitter"></i></a> *@
-    @*                 <a href="#" class="text-light me-2"><i class="bi bi-instagram"></i></a> *@
-    @*             </div> *@
-    @*         </div> *@
-    @*         <hr class="bg-light"> *@
-    @*         <p class="mb-0">&copy; 2025 Cinema. All Rights Reserved.</p> *@
-    @*     </div> *@
-    @* </footer> *@
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

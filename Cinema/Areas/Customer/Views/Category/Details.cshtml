@@ -1,8 +1,6 @@
 ﻿@model Category
 
-@{
-    Layout = null; /* Remove this if you're using a shared layout */
-}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +110,7 @@
     </style>
 </head>
 <body>
-   
+    @if(User.Identity.IsAuthenticated){
     <div class="container">
         <a asp-area="Customer" asp-controller="Category" asp-action="Index" class="details-btn my-3">
             All Categories
@@ -163,6 +161,6 @@
             }
         </div>
     </div>
-
+    }
 </body>
 </html>

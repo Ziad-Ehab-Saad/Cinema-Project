@@ -1,9 +1,6 @@
 ﻿@using Cinema.ViewModels
 @model ActorsDetails
 
-@{
-    Layout = null; /* Adjust if you're using a shared layout */
-}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -94,8 +91,8 @@
             }
     </style>
 </head>
-<body>
-
+<body> 
+    @if(User.Identity.IsAuthenticated){
     <div class="container">
         <!-- Actor Profile -->
         <div class="actor-profile">
@@ -127,6 +124,6 @@
         <!-- Back Button -->
         <a asp-area="Customer" asp-controller="Movie" asp-action="Index" class="back-btn my-2">← Back to Movies</a>
     </div>
-
+    }
 </body>
 </html>

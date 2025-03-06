@@ -1,8 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@if (User.IsInRole("admin"))
+{
+    <h1>@ViewBag.SuccessMessage</h1>
+    <h1>@User.Identity.Name</h1>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+     <a class="btn btn-primary" asp-action="Index" asp-area="Customer" asp-controller="Movie">movie</a>
+
+    </div>
+}

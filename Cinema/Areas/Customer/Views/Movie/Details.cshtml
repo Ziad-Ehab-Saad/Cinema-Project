@@ -1,9 +1,6 @@
 ﻿@using Cinema.ViewModels
 @model MovieDetailsViewModel
 
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -148,6 +145,7 @@
     </style>
 </head>
 <body>
+    @if(User.Identity.IsAuthenticated){
     <div class="container">
         <!-- Enhanced Movie Banner with Overlay -->
         <div class="banner-container">
@@ -220,5 +218,6 @@
         <!-- Back to Movies Button -->
         <a asp-area="Customer" asp-controller="Movie" asp-action="Index" class="back-btn">← Back to Movies</a>
     </div>
+    }
 </body>
 </html>

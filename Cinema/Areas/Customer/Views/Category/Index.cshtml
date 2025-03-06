@@ -1,5 +1,5 @@
 ﻿@model List<Category>
-
+ @if(User.Identity.IsAuthenticated){
 <div class="container mt-4">
     <h2 class="mb-4 text-center text-light">Categories</h2>
     <div class="row justify-content-center">
@@ -17,7 +17,7 @@
         }
     </div>
 </div>
-
+}
 <style>
     /* Netflix-style background */
     body {

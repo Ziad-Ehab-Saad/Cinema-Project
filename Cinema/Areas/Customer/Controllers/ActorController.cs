@@ -1,10 +1,12 @@
 ﻿using Cinema.Repositories.IRepositories;
 using Cinema.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class ActorController : Controller
     {
         private readonly IActorRepo actorRepo;

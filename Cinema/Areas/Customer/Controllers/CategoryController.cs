@@ -1,9 +1,11 @@
 ﻿using Cinema.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryrepo categoryrepo;

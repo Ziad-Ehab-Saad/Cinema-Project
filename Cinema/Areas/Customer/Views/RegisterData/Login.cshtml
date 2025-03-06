@@ -1,0 +1,123 @@
+﻿@model Cinema.ViewModels.LoginUserData
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    /* Full-page background color */
+    body {
+        background-color: rgba(0, 0, 0, 0.1);
+        ; /* Light Blue */
+    }
+
+    /* Centered form container */
+    .login-container {
+        max-width: 350px;
+        margin: 60px auto;
+        padding: 20px;
+        background-color: #ffffff; /* White form background */
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        /* Form header styling */
+        .login-container h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .login-container h4 {
+            text-align: center;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+
+        /* Input field styling */
+        .login-container input.form-control {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+        }
+
+        /* Highlight inputs on focus */
+        .login-container input:focus {
+            border-color: #007bff;
+            box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Validation error messages */
+        .login-container .text-danger {
+            font-size: 0.875rem;
+        }
+
+        /* Submit button styling */
+        .login-container .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 6px;
+        }
+
+    /* Register & Back Home Links */
+    .login-links {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+        .login-links a {
+            display: block;
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+            margin-top: 5px;
+        }
+
+            .login-links a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+<div class="login-container">
+    <h1>Login</h1>
+    <h4>LoginUserData</h4>
+    <hr />
+
+    <form asp-action="Login">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+            </label>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Login" class="btn btn-primary my-3" />
+        </div>
+    </form>
+
+    <div class="login-links">
+        <a asp-action="Register" asp-controller="RegisterData" asp-area="Customer">Create an Account</a>
+        <a asp-action="Index" asp-area="Customer" asp-controller="Home">Back to Home Page</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

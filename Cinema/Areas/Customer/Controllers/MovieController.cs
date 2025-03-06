@@ -1,11 +1,13 @@
 ﻿using Cinema.Models;
 using Cinema.Repositories.IRepositories;
 using Cinema.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class MovieController : Controller
     {
         private readonly IMovieRepo movieRepo;
@@ -18,6 +20,10 @@ namespace Cinema.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.RegisterMessage = TempData["SucessRegister"];
+            ViewBag.LoginMessage = TempData["SucessUserLogin"];
+            
+            ViewBag.SucessLogin = TempData["SucessLogin"];
             var movies = movieRepo.Get(includes: [e => e.ActorMovies, e => e.Category, e => e.Cinema]);
 
 

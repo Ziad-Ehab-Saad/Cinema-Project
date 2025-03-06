@@ -1,0 +1,130 @@
+﻿@model Cinema.ViewModels.RegisterUserData
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    body{
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    /* Center the form on the page */
+    .register-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f8f9fa; /* Light gray background */
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        /* Styling for form labels */
+        .register-container label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Styling for input fields */
+        .register-container input.form-control {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+        }
+
+        /* Highlight input fields on focus */
+        .register-container input:focus {
+            border-color: #007bff;
+            box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Validation error messages */
+        .register-container .text-danger {
+            font-size: 0.875rem;
+        }
+
+        /* Submit button */
+        .register-container .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 6px;
+        }
+
+        /* Login button */
+        .register-container .cta-btn {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .register-container .cta-btn:hover {
+                text-decoration: underline;
+            }
+
+    /* Back to home link */
+    .back-home {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="register-container">
+    <h1 class="text-center">Register</h1>
+    <h4 class="text-center text-muted">RegisterUserData</h4>
+    <hr />
+
+    <form asp-action="Register">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConformPassword" class="control-label"></label>
+            <input asp-for="ConformPassword" class="form-control" />
+            <span asp-validation-for="ConformPassword" class="text-danger"></span>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+            </label>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary my-3" />
+        </div>
+    </form>
+
+    <a asp-area="Customer" asp-action="Login" asp-controller="RegisterData" class="cta-btn">Login</a>
+</div>
+
+<div class="back-home">
+    <a asp-action="Index" asp-area="Customer" asp-controller="Home">Back to Home Page</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
