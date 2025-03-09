@@ -22,8 +22,8 @@ namespace Cinema.ViewModels
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Movie image is required.")]
-        public IFormFile Image { get; set; }
+        //[Required(ErrorMessage = "Movie image is required.")]
+        public IFormFile? Image { get; set; }
 
         [Required(ErrorMessage = "Trailer URL is required.")]
         public string? TrailerUrl { get; set; }
@@ -48,5 +48,6 @@ namespace Cinema.ViewModels
 
         public List<int>? SelectedActorIds { get; set; } = new List<int>();
         public List<Actor>? Actors { get; set; } = new List<Actor>();
+        public string? ImageUrl { get; set; }
     }
 }
