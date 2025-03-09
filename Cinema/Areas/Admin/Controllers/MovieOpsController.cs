@@ -35,13 +35,6 @@ namespace Cinema.Areas.Admin.Controllers
 
         }
 
-
-
-
-
-
-
-
         [HttpGet]
         public IActionResult Create()
         {
@@ -105,6 +98,19 @@ namespace Cinema.Areas.Admin.Controllers
             movieViewModel.Actors = actors.ToList();
             return View(movieViewModel);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var movie = movieRepo.GetOne(e=>e.Id==id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            movieRepo.Delete(movie);
+            movieRepo.Commit();
+            return RedirectToAction("Display", "MovieOps", new { area = "Admin" });
+        }
+
 
     }
 }
