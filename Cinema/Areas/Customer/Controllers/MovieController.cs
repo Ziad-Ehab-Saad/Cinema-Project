@@ -12,17 +12,22 @@ namespace Cinema.Areas.Customer.Controllers
     {
         private readonly IMovieRepo movieRepo;
         private readonly IActorRepo actorRepo;
-        public MovieController(IMovieRepo movieRepo, IActorRepo actorRepo)
+        private readonly ICategoryrepo categoryRepo;
+        private readonly IEcinemaRepo ecinemaRepo;
+
+        public MovieController(IMovieRepo movieRepo, IActorRepo actorRepo, ICategoryrepo categoryRepo, IEcinemaRepo ecinemaRepo)
         {
             this.movieRepo = movieRepo;
             this.actorRepo = actorRepo;
+            this.categoryRepo = categoryRepo;
+            this.ecinemaRepo = ecinemaRepo;
         }
 
         public IActionResult Index()
         {
             ViewBag.RegisterMessage = TempData["SucessRegister"];
             ViewBag.LoginMessage = TempData["SucessUserLogin"];
-            
+
             ViewBag.SucessLogin = TempData["SucessLogin"];
             var movies = movieRepo.Get(includes: [e => e.ActorMovies, e => e.Category, e => e.Cinema]);
 
@@ -58,8 +63,7 @@ namespace Cinema.Areas.Customer.Controllers
             var movies = movieRepo.Get(m => m.Name.Contains(name), includes: [e => e.ActorMovies, e => e.Category, e => e.Cinema]);
             return View("Index", movies.ToList());
         }
-
-
+       
 
 
     }

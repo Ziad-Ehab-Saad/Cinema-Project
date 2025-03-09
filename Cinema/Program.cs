@@ -32,6 +32,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
 builder.Services.AddScoped<IMovieRepo, MovieRepository>();
 builder.Services.AddScoped<IActorRepo, ActorRepository>();
 builder.Services.AddScoped<ICategoryrepo, CategoryRepo>();
+builder.Services.AddScoped<IEcinemaRepo, EcinemaRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
