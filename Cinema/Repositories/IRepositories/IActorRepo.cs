@@ -6,7 +6,7 @@ namespace Cinema.Repositories.IRepositories
     public interface IActorRepo :  IRepository<Actor>
     {
         Actor? GetActorWithDetails(Expression<Func<Actor, bool>> filter);
-
+        public void Update(Actor actor);
 
     }
 }

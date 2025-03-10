@@ -25,5 +25,10 @@ namespace Cinema.Repositories
 
 
         }
+
+        public void Update(Category category) {
+        dbContext.categories.Update(category);
+
+        }
     }
 }

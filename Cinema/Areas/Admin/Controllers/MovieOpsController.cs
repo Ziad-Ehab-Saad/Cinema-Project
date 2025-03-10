@@ -170,7 +170,6 @@ namespace Cinema.Areas.Admin.Controllers
             var movie = movieRepo.GetOne(m => m.Id == id);
             if (movie == null) return NotFound();
 
-            // Update movie properties
             movie.Name = movieViewModel.Name;
             movie.Description = movieViewModel.Description;
             movie.Price = movieViewModel.Price;
@@ -180,7 +179,6 @@ namespace Cinema.Areas.Admin.Controllers
             movie.CategoryId = movieViewModel.CategoryId;
             movie.CinemaId = movieViewModel.CinemaId;
 
-            // Handle Image Upload (if a new file is uploaded)
             if (movieViewModel.Image != null && movieViewModel.Image.Length > 0)
             {
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/assets/movies");
@@ -192,7 +190,6 @@ namespace Cinema.Areas.Admin.Controllers
                     movieViewModel.Image.CopyTo(fileStream);
                 }
 
-                // Delete the old image (if it exists)
                 if (!string.IsNullOrEmpty(movie.ImageUrl))
                 {
                     string oldImagePath = Path.Combine(uploadsFolder, movie.ImageUrl);
@@ -202,22 +199,18 @@ namespace Cinema.Areas.Admin.Controllers
                     }
                 }
 
-                // Save new file name in the database
                 movie.ImageUrl = uniqueFileName;
             }
 
-            // ⚠️ Only update actors if the user selected new ones
             if (movieViewModel.SelectedActorIds != null && movieViewModel.SelectedActorIds.Any())
             {
                 var existingActorMovies = actorMovieRepo.Get(am => am.MovieId == id).ToList();
 
-                // Remove existing actor relations
                 foreach (var actorMovie in existingActorMovies)
                 {
                     actorMovieRepo.Delete(actorMovie);
                 }
 
-                // Add new selected actors
                 foreach (var actorId in movieViewModel.SelectedActorIds)
                 {
                     actorMovieRepo.Create(new ActorMovie
@@ -228,7 +221,7 @@ namespace Cinema.Areas.Admin.Controllers
                 }
             }
 
-            movieRepo.Update(movie); // Save updates to the database
+            movieRepo.Update(movie); 
 
             return RedirectToAction("Display", "MovieOps");
         }

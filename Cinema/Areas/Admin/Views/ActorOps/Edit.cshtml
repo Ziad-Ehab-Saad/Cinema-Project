@@ -1,0 +1,69 @@
+﻿@using Cinema.ViewModels
+@model ActorOpsViewModel
+
+@{
+    ViewData["Title"] = "Edit Actor";
+}
+
+<h2>Edit Actor : @Model.FirstName</h2>
+
+<div class="card shadow-sm p-4">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label">First Name</label>
+            <input asp-for="FirstName" class="form-control" placeholder="Enter first name" required>
+            <span asp-validation-for="FirstName"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label">Last Name</label>
+            <input asp-for="LastName" class="form-control" placeholder="Enter last name" required>
+            <span asp-validation-for="LastName"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Bio" class="form-label">Biography</label>
+            <textarea asp-for="Bio" class="form-control" rows="3" placeholder="Enter actor's biography"></textarea>
+            <span asp-validation-for="Bio"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Image" class="form-label">Profile Picture</label>
+            <input type="file" name="Image" class="form-control" accept="image/*" onchange="previewImage(event)">
+            <span asp-validation-for="Image"></span>
+            <div class="mt-2">
+                <img id="imagePreview" src="#" alt="Profile Preview" class="d-none rounded-circle" width="100" height="100">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="News" class="form-label">Latest News</label>
+            <textarea asp-for="News" class="form-control" rows="2" placeholder="Enter latest news about the actor"></textarea>
+
+            <span asp-validation-for="News"></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Edit Actor</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            var input = event.target;
+            var preview = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove("d-none"); // Show the image
+                };
+                reader.readAsDataURL(input.files[0]); // Convert to base64
+            }
+        }
+    </script>
+}

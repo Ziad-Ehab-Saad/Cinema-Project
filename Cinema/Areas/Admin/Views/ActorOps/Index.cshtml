@@ -1,0 +1,49 @@
+﻿@model List<Actor>
+
+@{
+    ViewData["Title"] = "Actors";
+}
+
+<h2>Actors List</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Actor</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Profile Picture</th>
+            <th>Full Name</th>
+            <th>Bio</th>
+            <th>News</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var actor in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/assets/cast/@actor.ProfilePicture" alt="Profile Picture" width="50" height="50" class="rounded-circle" />
+                </td>
+                <td>@($"{actor.FirstName} {actor.LastName}")</td>
+                <td>@actor.Bio</td>
+                <td>@actor.News</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@actor.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Details" asp-area="Customer" asp-controller="Actor" asp-route-id="@actor.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@actor.Id" class="btn btn-danger btn-sm" onclick="return confirmDelete('@actor.FirstName', '@actor.LastName')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function confirmDelete(firstName, lastName) {
+            return confirm(`Are you sure you want to delete ${firstName} ${lastName}?`);
+        }
+    </script>
+}

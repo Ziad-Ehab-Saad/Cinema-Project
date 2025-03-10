@@ -20,6 +20,11 @@ namespace Cinema.Repositories
                     .ThenInclude(am => am.Movie)
                 .FirstOrDefault(filter);
         }
+        public void Update(Actor actor)
+        {
+            dbContext.actors.Update(actor);
+         
+        }
 
     }
 }
