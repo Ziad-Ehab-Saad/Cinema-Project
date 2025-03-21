@@ -30,7 +30,7 @@ namespace Cinema.Areas.Customer.Controllers
         }
 
 
-        public IActionResult  AddToCart(int movieId, int Count)
+        public IActionResult AddToCart(int movieId, int Count)
         {
             if (Count <= 0)
             {
@@ -133,8 +133,11 @@ namespace Cinema.Areas.Customer.Controllers
             cartItemRepo.Delete(cartItem);
             cartItemRepo.Commit();
 
-            cartRepo.Delete(cart);
-            cartItemRepo.Commit();
+            if (cart == null)
+            {
+                cartRepo.Delete(cart);
+                cartItemRepo.Commit();
+            }
             TempData["SuccessMessage"] = "Movie removed from cart successfully!";
             return RedirectToAction(nameof(DisplayCart));
         }
@@ -165,7 +168,7 @@ namespace Cinema.Areas.Customer.Controllers
 
 
         }
-      
+
         public IActionResult Decrement(int cartItemId)
         {
             var userId = userManager.GetUserId(User);
@@ -173,7 +176,7 @@ namespace Cinema.Areas.Customer.Controllers
             {
                 return RedirectToAction("Index", "Movie", new { area = "Customer" });
             }
-            var cartItem = cartItemRepo.GetOne(e=>e.Id==cartItemId);
+            var cartItem = cartItemRepo.GetOne(e => e.Id == cartItemId);
 
             if (cartItem != null)
             {
@@ -188,7 +191,7 @@ namespace Cinema.Areas.Customer.Controllers
                     TempData["SuccessMessage"] = "Movie removed from cart successfully!";
                 }
 
-                cartItemRepo.Commit(); 
+                cartItemRepo.Commit();
             }
 
             return RedirectToAction("DisplayCart");
@@ -232,7 +235,7 @@ namespace Cinema.Areas.Customer.Controllers
                 orderItemRepo.Create(orderItem);
             }
 
-            orderItemRepo.Commit(); 
+            orderItemRepo.Commit();
 
             order = orderRepo.GetOne(e => e.Id == order.Id, includes: [e => e.OrderItems]);
 
@@ -248,7 +251,7 @@ namespace Cinema.Areas.Customer.Controllers
 
         public IActionResult Payment(int orderId)
         {
-             var order = orderRepo.GetOrderWithDetails(orderId);
+            var order = orderRepo.GetOrderWithDetails(orderId);
 
             if (order == null)
             {
@@ -270,14 +273,14 @@ namespace Cinema.Areas.Customer.Controllers
 
         public IActionResult PaymentSuccess(int orderId)
         {
-            var order = orderRepo.GetOne(e=>e.Id==orderId);
+            var order = orderRepo.GetOne(e => e.Id == orderId);
             if (order == null)
             {
                 return NotFound();
             }
 
-            order.Status = OrderStatus.Completed; 
-            order.OrderDate = DateTime.Now; 
+            order.Status = OrderStatus.Completed;
+            order.OrderDate = DateTime.Now;
             orderRepo.Edit(order);
             orderRepo.Commit();
 
