@@ -14,6 +14,8 @@ namespace Cinema.DataAccess
         public DbSet<ActorMovie> actorMovies { get; set; }
         public DbSet<Cart> carts { get; set; }
         public DbSet<CartItems> cartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
 

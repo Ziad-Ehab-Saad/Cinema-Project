@@ -68,9 +68,11 @@
 
         <div class="text-right mt-3">
             <h4><strong>Total: </strong>💰 $@(Model.CartItems.Sum(i => i.Quantity * i.movie.Price).ToString("0.00"))</h4>
-            <a asp-action="Checkout" class="btn btn-success btn-lg mt-2">
-                🛍️ Proceed to Checkout
+            <a asp-action="Checkout" asp-route-orderId="@Model.Id" class="btn btn-primary">
+                Proceed to Payment
             </a>
+
+
         </div>
     }
     else

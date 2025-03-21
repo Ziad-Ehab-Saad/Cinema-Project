@@ -41,6 +41,8 @@ namespace Cinema.Models
         public List<ActorMovie> ActorMovies { get; set; } = new List<ActorMovie>();
 
         public List<CartItems> CartItems { get; set; } = new List<CartItems>();     
+        public List<OrderItems> OrderItems { get; set; } = new List<OrderItems>();     
+
 
     }
 }

@@ -19,6 +19,11 @@ namespace Cinema.Repositories
                 .FirstOrDefault(c => c.UserId == userId);
 
     }
+        public void ClearCart(Cart cart)
+        {
+            cart.CartItems.Clear(); // Remove all items
+            Commit(); // Save changes
+        }
 
-}
+    }
 }

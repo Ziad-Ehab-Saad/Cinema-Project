@@ -1,0 +1,41 @@
+﻿@model Order
+
+<div class="container mt-4">
+    <h2 class="text-center">Order Details</h2>
+
+    <div class="card p-3 mb-4">
+        <h5><strong>Order ID:</strong> @Model.Id</h5>
+        <h5><strong>Order Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd HH:mm")</h5>
+        <h5><strong>Status:</strong> @Model.Status</h5>
+        <h5><strong>Total Amount:</strong> $@Model.TotalAmount</h5>
+    </div>
+
+    <h3>Order Items</h3>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Movie</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.Movie.Name</td>
+                    <td>
+                        <img src="~/assets/movies/@item.Movie.ImageUrl" class="img-thumbnail" style="width: 80px; height: 100px;" />
+                    </td>
+                    <td>$@item.Movie.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>$@(item.Quantity * item.Movie.Price)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Index" asp-controller="Movie" class="btn btn-primary">Continue Shopping</a>
+</div>
