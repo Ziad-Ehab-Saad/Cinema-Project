@@ -16,7 +16,7 @@ namespace Cinema.Areas.Customer.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMovieRepo movieRepo;
 
-        public CartController(IcartRepo cartRepo ,ICartItemsRepo cartItemRepo,UserManager<ApplicationUser> userManager, IMovieRepo movieRepo)
+        public CartController(IcartRepo cartRepo, ICartItemsRepo cartItemRepo, UserManager<ApplicationUser> userManager, IMovieRepo movieRepo)
         {
             this.cartRepo = cartRepo;
             this.cartItemRepo = cartItemRepo;
@@ -24,30 +24,33 @@ namespace Cinema.Areas.Customer.Controllers
             this.movieRepo = movieRepo;
         }
 
-        
-        public IActionResult AddToCart(int movieId)
+
+        public IActionResult AddToCart(int movieId, int Count)
         {
+            if (Count <= 0)
+            {
+                return BadRequest("Invalid quantity.");
+            }
+
             var userId = userManager.GetUserId(User);
             if (userId == null)
             {
                 return RedirectToAction("Index", "Movie", new { area = "Customer" });
             }
 
-            // Ensure the movie exists
-            var movieExists = movieRepo.Exists(movieId);  // Replace direct DB call with repo method
+            var movieExists = movieRepo.Exists(movieId);
             if (!movieExists)
             {
                 return BadRequest("Movie not found.");
             }
 
-            // Get or create the cart
-            var cart = cartRepo.GetCartByUserId(userId);
-            var movie = movieRepo.GetOne(e=>e.Id==movieId);
-            if(movie.MovieStatus == MovieStatus.Expired || movie.MovieStatus == MovieStatus.ComingSoon)
-            {
-                return BadRequest("Movie not available.");
-            }
+            var movie = movieRepo.GetOne(e => e.Id == movieId);
+            //if (movie.MovieStatus == MovieStatus.Expired || movie.MovieStatus == MovieStatus.ComingSoon)
+            //{
+            //    return BadRequest("Movie not available.");
+            //}
 
+            var cart = cartRepo.GetCartByUserId(userId);
             if (cart == null)
             {
                 cart = new Cart
@@ -61,11 +64,10 @@ namespace Cinema.Areas.Customer.Controllers
                 cartRepo.Commit();
             }
 
-            // Check if the movie is already in the cart
             var existingCartItem = cartItemRepo.GetCartItem(cart.Id, movieId);
             if (existingCartItem != null)
             {
-                existingCartItem.Quantity += 1;
+                existingCartItem.Quantity += Count; 
                 cartItemRepo.Edit(existingCartItem);
             }
             else
@@ -74,7 +76,7 @@ namespace Cinema.Areas.Customer.Controllers
                 {
                     CartId = cart.Id,
                     MovieId = movieId,
-                    Quantity = 1
+                    Quantity = Count
                 };
 
                 cartItemRepo.Create(cartItem);
@@ -96,9 +98,97 @@ namespace Cinema.Areas.Customer.Controllers
             }
             var cart = cartRepo.GetCartByUserId(userId);
             if (cart == null) return RedirectToAction("Index", "Movie", new { area = "Customer" });
-           
+
             return View("DisplayCart", cart);
         }
 
+        public IActionResult RemoveFromCart(int cartItemId)
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToAction("Index", "Movie", new { area = "Customer" });
+            }
+
+            var cartItem = cartItemRepo.GetOne(e => e.Id == cartItemId);
+            if (cartItem == null)
+            {
+                return NotFound();
+            }
+
+            // Ensure the item belongs to the user's cart
+            var cart = cartRepo.GetCartByUserId(userId);
+            if (cart == null || cartItem.CartId != cart.Id)
+            {
+                return BadRequest("Unauthorized action.");
+            }
+
+            cartItemRepo.Delete(cartItem);
+            cartItemRepo.Commit();
+
+            TempData["SuccessMessage"] = "Movie removed from cart successfully!";
+            return RedirectToAction(nameof(DisplayCart));
+        }
+
+        public IActionResult Increment(int cartItemId)
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToAction("Index", "Movie", new { area = "Customer" });
+            }
+            var cartItem = cartItemRepo.GetOne(e => e.Id == cartItemId);
+            if (cartItem == null)
+            {
+                return NotFound();
+            }
+            var cart = cartRepo.GetCartByUserId(userId);
+            if (cart == null || cartItem.CartId != cart.Id)
+            {
+                return BadRequest("Unauthorized action.");
+            }
+            cartItem.Quantity++;
+            cartItemRepo.Edit(cartItem);
+            cartItemRepo.Commit();
+            TempData["SuccessMessage"] = "Quantity updated successfully!";
+            return RedirectToAction(nameof(DisplayCart));
+
+
+
+        }
+        public IActionResult Decrement(int cartItemId)
+        {
+
+            var userId = userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToAction("Index", "Movie", new { area = "Customer" });
+            }
+            var cartItem = cartItemRepo.GetOne(e => e.Id == cartItemId);
+            if (cartItem == null)
+            {
+                return NotFound();
+            }
+            var cart = cartRepo.GetCartByUserId(userId);
+            if (cart == null || cartItem.CartId != cart.Id)
+            {
+                return BadRequest("Unauthorized action.");
+            }
+            if (cartItem.Quantity > 1)
+            {
+                cartItem.Quantity--;
+
+                cartItemRepo.Edit(cartItem);
+                cartItemRepo.Commit();
+
+                TempData["SuccessMessage"] = "Quantity updated successfully!";
+            }
+            return RedirectToAction(nameof(DisplayCart));
+
+
+
+        }
+
     }
+
 }

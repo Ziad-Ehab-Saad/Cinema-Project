@@ -196,7 +196,18 @@
                 </div>
             </div>
         </div>
+            <div>
+                <form method="post" asp-action="AddToCart" asp-area="Customer" asp-controller="Cart">
+                    <input type="hidden" name="movieId" value="@Model.movie.Id" /> <!-- Hidden field for movieId -->
+                    <input name="Count" type="number" placeholder="Quantity" min="1" required />
 
+                    <button type="submit" class="btn btn-primary">
+                        Add To Cart
+                    </button>
+                </form>
+            </div>
+
+            
         <!-- Actors Section -->
         <div class="actors-section">
             <h3 class="section-title">Actors</h3>

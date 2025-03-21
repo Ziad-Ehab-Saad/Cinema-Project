@@ -1,53 +1,84 @@
 ﻿@model Cart
 
-<div class="container mt-4">
-    <h2 class="text-center">Shopping Cart</h2>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
-    <div class="card p-3 mb-4">
-        <h5>Cart ID: @Model.Id</h5>
-        <h5>Created At: @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</h5>
-        <h5>User: @Model.UserId</h5>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">🛒 Your Shopping Cart</h2>
+
+    <div class="card p-4 shadow-sm mb-4">
+        <h5><strong>Cart ID:</strong> @Model.Id</h5>
+        <h5><strong>Created At:</strong> @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</h5>
+        <h5><strong>User ID:</strong> @Model.UserId</h5>
     </div>
 
     @if (Model.CartItems != null && Model.CartItems.Any())
     {
-        <table class="table table-bordered">
+        <table class="table table-hover shadow-sm">
             <thead class="thead-dark">
-                <tr>
+                <tr class="text-center">
                     <th>Movie</th>
                     <th>Image</th>
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Total</th>
                     <th>Actions</th>
+                    <th colspan="2">Adjust Quantity</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model.CartItems)
                 {
-                    <tr>
+                    <tr class="text-center align-middle">
                         <td>@item.movie.Name</td>
                         <td>
-                            <img src="~/assets/movies/@item.movie.ImageUrl" class="img-thumbnail" style="width: 80px; height: 100px;" />
+                            <img src="~/assets/movies/@item.movie.ImageUrl" class="img-thumbnail"
+                                 style="width: 80px; height: 100px; object-fit: cover;" />
                         </td>
-                        <td>$@item.movie.Price</td>
+                        <td><strong>$@item.movie.Price.ToString("0.00")</strong></td>
                         <td>@item.Quantity</td>
-                        <td>$@(item.Quantity * item.movie.Price)</td>
+                        <td><strong>@($"${(item.Quantity * item.movie.Price):0.00}")</strong></td>
+
                         <td>
-                            <a asp-action="RemoveFromCart" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Remove</a>
+                            <a asp-action="RemoveFromCart" asp-route-cartItemId="@item.Id"
+                               class="btn btn-danger btn-sm">
+                                ❌ Remove
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-action="Increment" asp-route-cartItemId="@item.Id"
+                               class="btn btn-primary btn-sm">
+                                ➕
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-action="Decrement" asp-route-cartItemId="@item.Id"
+                               class="btn btn-warning btn-sm">
+                                ➖
+                            </a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        <div class="text-right">
-            <h4>Total: $@(Model.CartItems.Sum(i => i.Quantity * i.movie.Price))</h4>
-            <a asp-action="Checkout" class="btn btn-success">Checkout</a>
+        <div class="text-right mt-3">
+            <h4><strong>Total: </strong>💰 $@(Model.CartItems.Sum(i => i.Quantity * i.movie.Price).ToString("0.00"))</h4>
+            <a asp-action="Checkout" class="btn btn-success btn-lg mt-2">
+                🛍️ Proceed to Checkout
+            </a>
         </div>
     }
     else
     {
-        <p class="text-center">Your cart is empty.</p>
+        <div class="alert alert-info text-center p-4">
+            <h4>Your cart is empty 😞</h4>
+            <p>Explore our movies and add some to your cart!</p>
+            <a asp-action="Index" asp-controller="Movie" class="btn btn-primary">🎬 Browse Movies</a>
+        </div>
     }
 </div>
