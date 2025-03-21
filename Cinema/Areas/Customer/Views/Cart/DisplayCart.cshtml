@@ -1,0 +1,53 @@
+﻿@model Cart
+
+<div class="container mt-4">
+    <h2 class="text-center">Shopping Cart</h2>
+
+    <div class="card p-3 mb-4">
+        <h5>Cart ID: @Model.Id</h5>
+        <h5>Created At: @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</h5>
+        <h5>User: @Model.UserId</h5>
+    </div>
+
+    @if (Model.CartItems != null && Model.CartItems.Any())
+    {
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Movie</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.movie.Name</td>
+                        <td>
+                            <img src="~/assets/movies/@item.movie.ImageUrl" class="img-thumbnail" style="width: 80px; height: 100px;" />
+                        </td>
+                        <td>$@item.movie.Price</td>
+                        <td>@item.Quantity</td>
+                        <td>$@(item.Quantity * item.movie.Price)</td>
+                        <td>
+                            <a asp-action="RemoveFromCart" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Remove</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-right">
+            <h4>Total: $@(Model.CartItems.Sum(i => i.Quantity * i.movie.Price))</h4>
+            <a asp-action="Checkout" class="btn btn-success">Checkout</a>
+        </div>
+    }
+    else
+    {
+        <p class="text-center">Your cart is empty.</p>
+    }
+</div>

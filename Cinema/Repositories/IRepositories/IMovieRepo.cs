@@ -7,5 +7,6 @@ namespace Cinema.Repositories.IRepositories
     {
         Movie? GetMovieWithDetails(Expression<Func<Movie, bool>> filter);
         public void Update(Movie movie);
+        public bool Exists(int movieId);
     }
 }

@@ -133,6 +133,12 @@
             <button type="submit" class="btn btn-primary ms-2">Search</button>
         </form> 
     </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
 
     <!-- Movies List -->
     <div class="container">
@@ -173,6 +179,10 @@
                             <!-- Details Button -->
                             <a asp-area="Customer" asp-controller="Movie" asp-action="Details" asp-route-id="@item.Id" class="details-btn">
                                 View Details
+                            </a>
+
+                            <a asp-area="Customer" asp-controller="Cart" asp-action="AddToCart" asp-route-movieId="@item.Id" class="details-btn">
+                                Add To Cart
                             </a>
                         </div>
                     </div>

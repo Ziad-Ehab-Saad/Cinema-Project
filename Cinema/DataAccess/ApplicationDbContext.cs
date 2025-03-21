@@ -5,16 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.DataAccess
 {
-    public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Movie>movies{ get; set; }
+        public DbSet<Movie> movies { get; set; }
         public DbSet<Actor> actors { get; set; }
         public DbSet<ECinema> cinemas { get; set; }
         public DbSet<Category> categories { get; set; }
-        public DbSet<ActorMovie>actorMovies { get; set; }
-        public ApplicationDbContext(DbContextOptions options):base(options)
+        public DbSet<ActorMovie> actorMovies { get; set; }
+        public DbSet<Cart> carts { get; set; }
+        public DbSet<CartItems> cartItems { get; set; }
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-            
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +36,33 @@ namespace Cinema.DataAccess
                 .WithMany(m => m.ActorMovies)
                 .HasForeignKey(am => am.MovieId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Cart>(
+                entity =>
+                {
+                    entity.HasKey(e => e.Id);
+                    entity.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
+
+                });
+            modelBuilder.Entity<CartItems>()
+                .HasOne(e => e.movie)
+                .WithMany(e => e.CartItems)
+                .HasForeignKey(e => e.MovieId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CartItems>()
+                .HasOne(e => e.cart)
+                .WithMany(e => e.CartItems)
+                .HasForeignKey(e => e.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Cart>()
+            .HasOne(e => e.user)
+            .WithOne(e => e.UserCart)
+            .HasForeignKey<Cart>(e => e.UserId);
+
+
+
         }
 
 

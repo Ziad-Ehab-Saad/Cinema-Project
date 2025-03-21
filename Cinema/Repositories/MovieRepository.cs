@@ -23,6 +23,11 @@ namespace Cinema.Repositories
                     .ThenInclude(am => am.Actor)
                 .FirstOrDefault(filter);
         }
+        public bool Exists(int movieId)
+        {
+            return dbContext.movies.Any(m => m.Id == movieId);
+        }
+
         public void Update(Movie movie)
         {
             dbContext.movies.Update(movie);
